@@ -12,7 +12,7 @@ wait_lb() {
     done
 }
 
-# Disable firewall 
+# Disable firewall
 /usr/sbin/netfilter-persistent stop
 /usr/sbin/netfilter-persistent flush
 
@@ -21,11 +21,17 @@ systemctl disable netfilter-persistent.service
 
 # END Disable firewall
 
+# Add tailscale
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+
 apt-get update
-apt-get install -y software-properties-common jq
+apt-get install -y software-properties-common jq tailscale
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y  python3 python3-pip
 pip install oci-cli
+
+tailscale up --authkey={tailscale_authkey}
 
 local_ip=$(curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/vnics/ | jq -r '.[0].privateIp')
 flannel_iface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)')
@@ -35,7 +41,7 @@ first_instance=$(oci compute instance list --compartment-id ${compartment_ocid} 
 instance_id=$(curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance | jq -r '.displayName')
 first_last="last"
 
-%{ if install_nginx_ingress } 
+%{ if install_nginx_ingress }
 disable_traefik="--disable traefik"
 %{ endif }
 

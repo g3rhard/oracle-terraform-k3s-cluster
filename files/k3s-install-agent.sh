@@ -12,7 +12,7 @@ wait_lb() {
     done
 }
 
-# Disable firewall 
+# Disable firewall
 /usr/sbin/netfilter-persistent stop
 /usr/sbin/netfilter-persistent flush
 
