@@ -1,37 +1,14 @@
-variable "compartment_ocid" {
-
-}
-
-variable "tenancy_ocid" {
-
-}
-
-variable "user_ocid" {
-
-}
-
-variable "fingerprint" {
-
-}
-
-variable "private_key_path" {
-
-}
-
-variable "region" {
-  default = "<change_me>"
-}
-
 module "k3s_cluster" {
   region                 = var.region
-  availability_domain    = "<change_me>"
+  availability_domain    = var.availability_domain
   compartment_ocid       = var.compartment_ocid
-  PATH_TO_PUBLIC_LB_CERT = "<change_me>"
-  PATH_TO_PUBLIC_LB_KEY  = "<change_me>"
-  my_public_ip_cidr      = "<change_me>"
-  cluster_name           = "<change_me>"
-  environment            = "staging"
-  k3s_token              = "<change_me>"
+  PATH_TO_PUBLIC_LB_CERT = var.PATH_TO_PUBLIC_LB_CERT
+  PATH_TO_PUBLIC_LB_KEY  = var.PATH_TO_PUBLIC_LB_KEY
+  my_public_ip_cidr      = var.my_public_ip_cidr
+  cluster_name           = var.cluster_name
+  environment            = var.environment
+  k3s_token              = var.k3s_token
+  tailscale_authkey      = var.tailscale_authkey
   source                 = "../"
 }
 

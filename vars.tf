@@ -170,3 +170,7 @@ variable "longhorn_release" {
   type    = string
   default = "v1.2.3"
 }
+
+variable "tailscale_authkey" {
+  type = string
+}
